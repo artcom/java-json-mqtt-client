@@ -22,15 +22,14 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public class MqttClient implements MqttCallback, IMqttActionListener {
-
-    private static final Logger LOG = Logger.getLogger(MqttClient.class.getSimpleName());
+public class Client implements MqttCallback, IMqttActionListener {
+    private static final Logger LOG = Logger.getLogger(Client.class.getSimpleName());
 
     private static final int MAX_RECONNECT_DELAY = 10000;
     private static final int DEFAULT_KEEPALIVE_SECONDS = 2;
 
     private final MqttConnectOptions connectOptions;
-    private final MqttConnectionCallback connectionCallback;
+    private final ConnectionCallback connectionCallback;
     private final MqttAsyncClient pahoClient;
     private final SubscriptionHandler subscriptionHandler;
 
@@ -39,17 +38,17 @@ public class MqttClient implements MqttCallback, IMqttActionListener {
     private ScheduledFuture<?> connectingFuture;
     private boolean isConnecting;
     private boolean hasConnected;
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    public MqttClient(String tcpBrokerUri, String mqttClientId, MqttConnectionCallback callback) throws MqttException {
+    public Client(String tcpBrokerUri, String mqttClientId, ConnectionCallback callback) throws MqttException {
         this(tcpBrokerUri, mqttClientId, callback, DEFAULT_KEEPALIVE_SECONDS);
     }
 
-    public MqttClient(String tcpBrokerUri, String mqttClientId, MqttConnectionCallback callback, int keepAlive) throws MqttException {
+    public Client(String tcpBrokerUri, String mqttClientId, ConnectionCallback callback, int keepAlive) throws MqttException {
         this(tcpBrokerUri, mqttClientId, callback, keepAlive, true);
     }
 
-    public MqttClient(String tcpBrokerUri, String mqttClientId, MqttConnectionCallback callback, int keepAlive, boolean cleanSession) throws MqttException {
+    public Client(String tcpBrokerUri, String mqttClientId, ConnectionCallback callback, int keepAlive, boolean cleanSession) throws MqttException {
         connectionCallback = callback;
         connectOptions = new MqttConnectOptions();
         connectOptions.setKeepAliveInterval(keepAlive);
@@ -97,7 +96,7 @@ public class MqttClient implements MqttCallback, IMqttActionListener {
                     try {
                         isConnecting = true;
                         connectingFuture = null;
-                        pahoClient.connect(connectOptions, null, MqttClient.this);
+                        pahoClient.connect(connectOptions, null, Client.this);
                     } catch (MqttException e) {
                         isConnecting = false;
                         reconnect();
@@ -111,11 +110,11 @@ public class MqttClient implements MqttCallback, IMqttActionListener {
         pahoClient.disconnect();
     }
 
-    public void subscribe(final String topic, final IMqttMessageCallback callback) throws MqttException {
+    public void subscribe(final String topic, final IMessageCallback callback) throws MqttException {
         subscriptionHandler.subscribe(topic, callback);
     }
 
-    public void unsubscribe(final String topic, final IMqttMessageCallback callback) throws MqttException {
+    public void unsubscribe(final String topic, final IMessageCallback callback) throws MqttException {
         subscriptionHandler.unsubscribe(topic, callback);
     }
 
@@ -169,8 +168,8 @@ public class MqttClient implements MqttCallback, IMqttActionListener {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        List<IMqttMessageCallback> callbacks = subscriptionHandler.getCallbacks(topic);
-        for (IMqttMessageCallback callback : callbacks) {
+        List<IMessageCallback> callbacks = subscriptionHandler.getCallbacks(topic);
+        for (IMessageCallback callback : callbacks) {
             try {
                 callback.handleMessage(topic, message);
             } catch (Exception e) {

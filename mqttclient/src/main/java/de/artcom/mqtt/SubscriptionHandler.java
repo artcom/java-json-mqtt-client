@@ -14,7 +14,7 @@ import java.util.Set;
 
 class SubscriptionHandler {
     private final IMqttAsyncClient client;
-    private final Map<String, List<IMqttMessageCallback>> subscriptions = new HashMap<>();
+    private final Map<String, List<IMessageCallback>> subscriptions = new HashMap<>();
 
     private final Set<String> topicsToUnsubscribe = new HashSet<>();
 
@@ -22,9 +22,9 @@ class SubscriptionHandler {
         this.client = client;
     }
 
-    void subscribe(final String topic, final IMqttMessageCallback callback) throws MqttException {
+    void subscribe(final String topic, final IMessageCallback callback) throws MqttException {
         synchronized (subscriptions) {
-            List<IMqttMessageCallback> callbacks = subscriptions.get(topic);
+            List<IMessageCallback> callbacks = subscriptions.get(topic);
             if (callbacks == null) {
                 callbacks = new ArrayList<>();
                 subscriptions.put(topic, callbacks);
@@ -38,9 +38,9 @@ class SubscriptionHandler {
         }
     }
 
-    void unsubscribe(final String topic, final IMqttMessageCallback callback) throws MqttException {
+    void unsubscribe(final String topic, final IMessageCallback callback) throws MqttException {
         synchronized (subscriptions) {
-            List<IMqttMessageCallback> callbacks = subscriptions.get(topic);
+            List<IMessageCallback> callbacks = subscriptions.get(topic);
             if (callbacks != null) {
                 callbacks.remove(callback);
 
@@ -71,10 +71,10 @@ class SubscriptionHandler {
         }
     }
 
-    List<IMqttMessageCallback> getCallbacks(String topic) {
+    List<IMessageCallback> getCallbacks(String topic) {
         synchronized (subscriptions) {
-            List<IMqttMessageCallback> result = new ArrayList<>();
-            for (Map.Entry<String, List<IMqttMessageCallback>> entry : subscriptions.entrySet()) {
+            List<IMessageCallback> result = new ArrayList<>();
+            for (Map.Entry<String, List<IMessageCallback>> entry : subscriptions.entrySet()) {
                 if (matches(topic, entry.getKey())) {
                     result.addAll(entry.getValue());
                 }

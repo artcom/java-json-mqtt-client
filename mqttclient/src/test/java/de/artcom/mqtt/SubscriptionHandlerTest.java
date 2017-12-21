@@ -15,8 +15,8 @@ public class SubscriptionHandlerTest {
 
     private SubscriptionHandler handler;
     private IMqttAsyncClient mockClient;
-    private MqttMessageCallback callback1;
-    private MqttMessageCallback callback2;
+    private MessageCallback callback1;
+    private MessageCallback callback2;
 
     @Before
     public void setup() {
@@ -25,8 +25,8 @@ public class SubscriptionHandlerTest {
 
         handler = new SubscriptionHandler(mockClient);
 
-        callback1 = mock(MqttMessageCallback.class);
-        callback2 = mock(MqttMessageCallback.class);
+        callback1 = mock(MessageCallback.class);
+        callback2 = mock(MessageCallback.class);
     }
 
     @Test

@@ -1,6 +1,6 @@
 package de.artcom.mqtt;
 
-public interface MqttConnectionCallback {
+public interface ConnectionCallback {
     void onDisconnect(Throwable cause);
 
     void onConnect();

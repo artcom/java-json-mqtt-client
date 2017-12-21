@@ -10,11 +10,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-public abstract class MqttMessageCallback<T> implements IMqttMessageCallback {
-    private static final Logger LOG = Logger.getLogger(MqttClient.class.getSimpleName());
+public abstract class MessageCallback<T> implements IMessageCallback {
+    private static final Logger LOG = Logger.getLogger(Client.class.getSimpleName());
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    protected MqttMessageCallback() {
+    protected MessageCallback() {
         objectMapper.setVisibility(objectMapper.getSerializationConfig().getDefaultVisibilityChecker()
                 .withFieldVisibility(JsonAutoDetect.Visibility.NONE)
                 .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
