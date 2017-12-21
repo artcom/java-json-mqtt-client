@@ -1,6 +1,5 @@
 package de.artcom.mqtt;
 
-
 import java.util.UUID;
 
 public class MqttClientId {
