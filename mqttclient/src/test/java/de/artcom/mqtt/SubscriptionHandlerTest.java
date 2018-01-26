@@ -9,7 +9,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class SubscriptionHandlerTest {
-
     private SubscriptionHandler handler;
     private IMqttAsyncClient mockClient;
     private MessageCallback callback1;
