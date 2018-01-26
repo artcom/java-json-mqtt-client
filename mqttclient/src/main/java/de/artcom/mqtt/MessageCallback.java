@@ -2,7 +2,6 @@ package de.artcom.mqtt;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.io.IOException;
