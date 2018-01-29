@@ -22,7 +22,7 @@ public abstract class MessageCallback<T> implements IMessageCallback {
                 .withCreatorVisibility(JsonAutoDetect.Visibility.PUBLIC_ONLY));
     }
 
-    public void handleMessage(String topic, MqttMessage message) {
+    public void onRawMessage(String topic, MqttMessage message) {
         if (message.getPayload().length == 0) {
             onEmptyMessage(topic, message);
         } else {
@@ -37,7 +37,9 @@ public abstract class MessageCallback<T> implements IMessageCallback {
         }
     }
 
-    public abstract void onMessage(String topic, T payload, MqttMessage message);
+    public void onMessage(String topic, T payload, MqttMessage message) {
+        LOG.info("Message for topic '" + topic + "' ignored");
+    }
 
     public void onParseError(IOException error, MqttMessage message) {
         LOG.severe("Error deserializing payload '" + message + "': " + error.getMessage());

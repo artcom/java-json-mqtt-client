@@ -162,7 +162,7 @@ public class Client implements MqttCallback, IMqttActionListener {
         List<IMessageCallback> callbacks = subscriptionHandler.getCallbacks(topic);
         for (IMessageCallback callback : callbacks) {
             try {
-                callback.handleMessage(topic, message);
+                callback.onRawMessage(topic, message);
             } catch (Exception e) {
                 LOG.severe("Error: " + e.getLocalizedMessage());
             }
