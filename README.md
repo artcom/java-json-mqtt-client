@@ -1,4 +1,4 @@
-# Java Mqtt Client Library
+# Java JSON Mqtt Client Library
 
 A thin paho mqtt client wrapper providing incoming message multiplexing and payload type de/serialization. 
 
